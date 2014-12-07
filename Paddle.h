@@ -27,6 +27,8 @@ public:
     virtual int GetY();
     virtual int GetUpperBound();
     virtual int GetLowerBound();
+    virtual int GetPaddleSize();
+
     
 private:
     void Render(const char* render);

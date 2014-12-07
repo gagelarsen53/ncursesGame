@@ -1,14 +1,15 @@
-/* 
+/*
  * File:   Game.cpp
+
  * Author: mikewright
- * 
+ *
  * Created on August 14, 2014, 9:04 AM
  */
 
 #include "Game.h"
 #include "CursesColors.h"
 #include <stdio.h>
-#include <unistd.h>     
+#include <unistd.h>
 #include <stdlib.h>
 
 Game::Game(const Game& orig) {}
@@ -28,6 +29,24 @@ void Game::Play() {
     Initialize();
     while (_playing) {
         Loop();
+        // Score?
+        if (_gameBall.GetX() - 1 == 0) {
+            _cpuScore++;
+        } else if (_gameBall.GetX() + 1 == _width) {
+            _userScore++;
+        }
+        // User Paddle?
+        for( int i = 0; i < _userPaddle.GetPaddleSize(); i++) {
+            if (_gameBall.GetX() - 1 == 3 && _gameBall.GetY() + _gameBall.GetYDir() == _userPaddle.GetY() + i && _gameBall.GetXDir() < 0 ) {
+                _gameBall.ChangeDir(0.75 + (i * 0.25));
+            } else if (_gameBall.GetX() - 1 == 3 && _gameBall.GetY() + _gameBall.GetYDir() == _cpuPaddle.GetY() + i && _gameBall.GetXDir() > 0 ) {
+                _gameBall.ChangeDir(0.75 + (i * 0.25));
+            }
+        }
+        // CPU Paddle?
+        for( int i = 0; i < _cpuPaddle.GetPaddleSize(); i ++) {
+
+        }
     }
 }
 
@@ -41,7 +60,7 @@ void Game::Initialize() {
     noecho();
     curs_set(0);
     RenderBoard();
-    
+
     _userPaddle.Init(3, 10, _height, 3);
     _cpuPaddle.Init(_width-3, 10, _height, 3);
     _playing = true;
@@ -57,7 +76,7 @@ void Game::Destroy() {
     }
 }
 
-void Game::Loop() {    
+void Game::Loop() {
     InputKey key = _input.ReadInput();
     switch (key) {
         case Quit:
@@ -69,10 +88,13 @@ void Game::Loop() {
         case Down:
             _userPaddle.Move(1);
             break;
+        case Start:
+            _gameBall.Init(50, 25, 2, _height, 0, _width);
+            break;
         default:
             break;
-    }    
-        
+    }
+
     //clear();
     RenderScore();
     _gameBall.Render();
@@ -91,12 +113,12 @@ void Game::RenderBoard() {
             } 
         }
     }
-    
+
     for (int i = 3; i < _height; ++i) {
         mvaddstr(i, 0, "|");
         mvaddstr(i, _width, "|");
     }
-    
+
     mvaddstr(_height, 0, "|");
     for (int i = 1; i <= _width-1; ++i) {
         mvaddstr(_height, i, "-");
@@ -111,5 +133,5 @@ void Game::RenderScore() {
     sprintf(buffer, "%d", _userScore);
     mvaddstr(1, 7, buffer);
     sprintf(buffer, "%d", _cpuScore);
-    mvaddstr(1, _width-8, buffer);    
+    mvaddstr(1, _width-8, buffer);
 }

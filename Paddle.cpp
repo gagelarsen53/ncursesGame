@@ -1,4 +1,4 @@
-/* 
+ /* 
  * File:   Padle.cpp
  * Author: mikewright
  * 
@@ -16,6 +16,7 @@ int Paddle::GetX() { return _x; }
 int Paddle::GetY() { return _y; }
 int Paddle::GetUpperBound() { return _upperBound; }
 int Paddle::GetLowerBound() { return _lowerBound; }
+int Paddle::GetPaddleSize() { return PaddleSize; }
 
 void Paddle::Render() {
     Render(" ");
@@ -38,6 +39,7 @@ void Paddle::Move(int distance) {
     _nextY = _y + distance;
     _nextX = _x;
 }
+
 
 void Paddle::Render(const char* render) {
     for (int i = 0; i < PaddleSize; ++i) {

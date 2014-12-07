@@ -6,20 +6,20 @@
  */
 #include "Game.h"
 #include <stdlib.h>
-//#include <stdio.h>
-//#include <unistd.h>                  
-//#include <curses.h>
-//#include <time.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <curses.h>
+#include <time.h>
 
 #define EIGTH_SECOND_SLEEP 125000000
 
 int main(void) {
-    
+
     Game game;
     game.Play();
     return EXIT_SUCCESS;
-    
-    /*
+
+/* 
     WINDOW * mainwin;
 
     //  Initialize ncurses 
@@ -68,5 +68,6 @@ int main(void) {
     refresh();
 
     printf("Key: %d %c\n", input, input); 
-    return EXIT_SUCCESS; */
+    return EXIT_SUCCESS;
+*/
 }
