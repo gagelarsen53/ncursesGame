@@ -21,7 +21,7 @@ private:
     Paddle _cpuPaddle;
     UserInput _input;
     WINDOW* _mainwin;
-    bool _playing;
+    bool _playing, _started;
     int _userScore, _cpuScore;
     int _width, _height, _paddleMin, _paddleMax;
     

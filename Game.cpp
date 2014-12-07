@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <math.h>
 
 Game::Game(const Game& orig) {}
 
@@ -29,24 +30,6 @@ void Game::Play() {
     Initialize();
     while (_playing) {
         Loop();
-        // Score?
-        if (_gameBall.GetX() - 1 == 0) {
-            _cpuScore++;
-        } else if (_gameBall.GetX() + 1 == _width) {
-            _userScore++;
-        }
-        // User Paddle?
-        for( int i = 0; i < _userPaddle.GetPaddleSize(); i++) {
-            if (_gameBall.GetX() - 1 == 3 && _gameBall.GetY() + _gameBall.GetYDir() == _userPaddle.GetY() + i && _gameBall.GetXDir() < 0 ) {
-                _gameBall.ChangeDir(0.75 + (i * 0.25));
-            } else if (_gameBall.GetX() - 1 == 3 && _gameBall.GetY() + _gameBall.GetYDir() == _cpuPaddle.GetY() + i && _gameBall.GetXDir() > 0 ) {
-                _gameBall.ChangeDir(0.75 + (i * 0.25));
-            }
-        }
-        // CPU Paddle?
-        for( int i = 0; i < _cpuPaddle.GetPaddleSize(); i ++) {
-
-        }
     }
 }
 
@@ -64,6 +47,7 @@ void Game::Initialize() {
     _userPaddle.Init(3, 10, _height, 3);
     _cpuPaddle.Init(_width-3, 10, _height, 3);
     _playing = true;
+    _started = false;
     _userScore = _cpuScore = 0;
 }
 
@@ -89,10 +73,37 @@ void Game::Loop() {
             _userPaddle.Move(1);
             break;
         case Start:
-            _gameBall.Init(50, 25, 2, _height, 0, _width);
+            if (!_started) {
+                _gameBall.Init(50, 25, 2, _height, 0, _width);
+                _started = true;
+            }
             break;
         default:
             break;
+    }
+
+    if (_started) {
+        // Score?
+        if (_gameBall.GetX() - 1 == 0) {
+            _cpuScore++;
+        } else if (_gameBall.GetX() + 1 == _width) {
+            _userScore++;
+        }
+        // User Paddle?
+        for( int i = 0; i < _userPaddle.GetPaddleSize(); i++) {
+            if (_gameBall.GetX() - 1 == 3 && floor(_gameBall.GetY() + _gameBall.GetYDir()) == _userPaddle.GetY() + i && _gameBall.GetXDir() < 0 ) {
+                _gameBall.ChangeDir(0.75 + (i * 0.25));
+            } else if (_gameBall.GetX() + 1 == _width - 3 && floor(_gameBall.GetY() + _gameBall.GetYDir()) == _cpuPaddle.GetY() + i && _gameBall.GetXDir() > 0 ) {
+                _gameBall.ChangeDir(0.75 + (i * 0.25));
+            }
+        }
+        if (_started) {
+            if (_gameBall.GetYDir() > 0) {
+                _cpuPaddle.Move(1);
+            } else {
+                _cpuPaddle.Move(-1);
+            }
+        }
     }
 
     //clear();

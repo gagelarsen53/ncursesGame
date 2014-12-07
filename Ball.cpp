@@ -8,6 +8,7 @@
 #include "Ball.h"
 #include <stdlib.h>
 #include <ncurses.h>
+#include <math.h>
 
 Ball::Ball() { }
 Ball::Ball(const Ball& orig) { }
@@ -25,6 +26,10 @@ void Ball::Render() {
     Move(_x, _y);
     mvaddstr(GetY(), GetX(), "0");
     usleep(100000);
+}
+
+void Ball::GameOver(){
+    mvaddstr(GetY(), GetX(), " ");
 }
 
 void Ball::Init(int x, int y, int upperBound, int lowerBound, int userBound, int cpuBound) {
@@ -53,11 +58,11 @@ void Ball::Move(float x, float y) {
             y = y * -1;
         }
     }
-    if( y + dir_y == _upperBound || y + dir_y == _lowerBound ) {
+    if( floor(y + dir_y) < _upperBound + 1 || floor(y + dir_y) > _lowerBound - 1 ) {
         dir_updown = dir_updown * -1;
         dir_y = dir_y * -1;
     }
-    if( x + dir_x == _userBound || x + dir_x == _cpuBound) {
+    if( floor(x + dir_x) < _userBound + 1 || floor(x + dir_x) > _cpuBound - 1) {
         dir_leftright = dir_leftright * -1;
         dir_x = dir_x * -1;
     }
@@ -66,9 +71,10 @@ void Ball::Move(float x, float y) {
 }
 
 void Ball::ChangeDir(float _newdir) {
-    if (dir_x > 0) {
-        dir_x = dir_leftright = _newdir;
+    if (dir_y > 0) {
+        dir_y = dir_updown = _newdir;
     } else {
-        dir_x = dir_leftright = _newdir * -1;
+        dir_y = dir_updown = _newdir * -1;
     }
+    dir_x = dir_leftright = dir_x * -1;
 }

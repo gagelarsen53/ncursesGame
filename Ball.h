@@ -32,6 +32,7 @@ public:
     void Init(int x, int y, int upperBound, int lowerBound, int userBound, int cpuBound);
     void Move(float x=NAN, float y=NAN);
     void ChangeDir(float _newdir);
+    void GameOver();
 };
 
 #endif	/* BALL_H */
