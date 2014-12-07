@@ -86,11 +86,15 @@ void Game::Loop() {
         // Score?
         if (_gameBall.GetX() - 1 == 0) {
             _cpuScore++;
+            _gameBall.GameOver();
+            _started = false;
         } else if (_gameBall.GetX() + 1 == _width) {
             _userScore++;
+            _gameBall.GameOver();
+            _started = false;
         }
         // User Paddle?
-        for( int i = 0; i < _userPaddle.GetPaddleSize(); i++) {
+        for( int i = 0; i <=  _userPaddle.GetPaddleSize(); i++) {
             if (_gameBall.GetX() - 1 == 3 && floor(_gameBall.GetY() + _gameBall.GetYDir()) == _userPaddle.GetY() + i && _gameBall.GetXDir() < 0 ) {
                 _gameBall.ChangeDir(0.75 + (i * 0.25));
             } else if (_gameBall.GetX() + 1 == _width - 3 && floor(_gameBall.GetY() + _gameBall.GetYDir()) == _cpuPaddle.GetY() + i && _gameBall.GetXDir() > 0 ) {
@@ -108,7 +112,9 @@ void Game::Loop() {
 
     //clear();
     RenderScore();
-    _gameBall.Render();
+    if (_started) {
+        _gameBall.Render();
+    }
     _userPaddle.Render();
     _cpuPaddle.Render();
     //refresh();

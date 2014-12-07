@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <math.h>
+#include <time.h>
 
 Ball::Ball() { }
 Ball::Ball(const Ball& orig) { }
@@ -39,10 +40,22 @@ void Ball::Init(int x, int y, int upperBound, int lowerBound, int userBound, int
     _lowerBound = lowerBound;
     _userBound = userBound;
     _cpuBound = cpuBound;
-    dir_updown = 1;
-    dir_leftright = 1;
-    dir_x = 1;
-    dir_y = 1;
+    srand(time(NULL));
+    int _randX, _randY;
+    if (rand() % 2 == 0) {
+        _randX = 1;
+    } else {
+        _randX = -1;
+    }
+    if (rand() % 2 == 0) {
+        _randY = -1;
+    } else {
+        _randY = 1;
+    }
+    dir_updown = _randY;
+    dir_leftright = _randX;
+    dir_x = _randX;
+    dir_y = _randY;
 }
 
 void Ball::Move(float x, float y) {
